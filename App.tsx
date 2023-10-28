@@ -1,25 +1,18 @@
-import { StyleSheet, View } from "react-native";
-import CreateAccount from "./Pages/CreateAccount";
-import { initializeApp } from "firebase/app";
-import { FirebaseConfig } from "./firebase";
-
+import { NativeRouter, Route, Routes } from "react-router-native";
+import HomePage from "./pages/Home";
+import LoginPage from "./pages/Login";
+import * as React from "react";
+import { ThemeProvider } from "react-native-magnus";
 
 export default function App() {
-  const app = initializeApp(FirebaseConfig); // Initialize Firebase
-
   return (
-    <View style={styles.container}>
-      <CreateAccount />
-    </View>
+    <ThemeProvider>
+      <NativeRouter>
+        <Routes>
+          <Route path="/" Component={LoginPage} />
+          <Route path="/dashboard" Component={HomePage} />
+        </Routes>
+      </NativeRouter>
+    </ThemeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1f2428",
-    alignItems: "center",
-    justifyContent: "center",
-  }
-
-});
