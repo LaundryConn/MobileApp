@@ -1,7 +1,8 @@
 import { Button, Text, Div, Image } from "react-native-magnus";
-import { Link } from "react-router-native";
+import { useNavigate } from "react-router-native";
 
 export default function Login() {
+  const navigate = useNavigate();
   return (
     <Div
       style={{
@@ -13,24 +14,20 @@ export default function Login() {
       }}
     >
       <Image source={require("../assets/logo_padding.png")} h={300} w={300} />
-      <Link to="dashboard"><Text color="white">test</Text></Link>
-      <Link to="dashboard">
-        <Button
-          onPress={() => {
-            // handle sign in logic
-          }}
-          bg="gray700"
-          alignSelf="center"
-          fontSize={20}
-          fontWeight="bold"
-          w={300}
-          p={10}
-        >
-          {/* <Image source={}></Image> */}
-          Sign in with NetId
-        </Button>
-      </Link>
-      {/* <Text color="white" style={{transform: "translate(90px,-5px)"}}>Coming soon</Text> */}
+      <Button
+        onPress={() => {
+          navigate("/dashboard");
+        }}
+        bg="gray700"
+        alignSelf="center"
+        fontSize={20}
+        fontWeight="bold"
+        w={300}
+        p={10}
+      >
+        {/* <Image source={}></Image> */}
+        Sign in with NetId
+      </Button>
       <Text color="white" m={10}>
         or
       </Text>
