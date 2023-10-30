@@ -28,3 +28,11 @@ npx expo start
 
 get icons from
 https://oblador.github.io/react-native-vector-icons/
+
+## Authors
+- Aditya Chandraker - Lead Developer
+- Sebastien - Developer
+- Ben
+- Sabrina
+- Damon
+- Sai
