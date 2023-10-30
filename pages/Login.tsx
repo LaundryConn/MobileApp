@@ -5,13 +5,11 @@ export default function Login() {
   const navigate = useNavigate();
   return (
     <Div
-      style={{
-        backgroundColor: "#1f2428",
-        height: "100%",
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      bg={"#1f2428"}
+      w={"100%"}
+      h={"100%"}
+      justifyContent={"center"}
+      alignItems={"center"}
     >
       <Image source={require("../assets/logo_padding.png")} h={300} w={300} />
       <Button
@@ -20,13 +18,13 @@ export default function Login() {
         }}
         bg="gray700"
         alignSelf="center"
-        fontSize={20}
-        fontWeight="bold"
         w={300}
-        p={10}
+        p={5}
       >
-        {/* <Image source={}></Image> */}
-        Sign in with NetId
+        <Image source={require("../assets/husky.jpeg")} h={40} w={40} />
+        <Text color="white" ml={3} fontSize={20} fontWeight="bold">
+          Sign in with NetId
+        </Text>
       </Button>
       <Text color="white" m={10}>
         or
@@ -43,7 +41,7 @@ export default function Login() {
       >
         Sign in with Google
       </Button>
-      <Text color="white" style={{ transform: "translate(90px,-5px)" }}>
+      <Text color="white" style={{ transform: "translate(100px,0px)" }}>
         Coming soon
       </Text>
     </Div>
