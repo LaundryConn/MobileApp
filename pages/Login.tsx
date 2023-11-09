@@ -11,6 +11,7 @@ export default function Login() {
       justifyContent={"center"}
       alignItems={"center"}
     >
+      
       <Image source={require("../assets/logo_padding.png")} h={300} w={300} />
       <Button
         onPress={() => {
