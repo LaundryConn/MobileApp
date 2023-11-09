@@ -1,23 +1,16 @@
-import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
+import { Text, Div, Button, Header, Icon, Input } from 'react-native-magnus';
+import Piechart from '../utils/Pie_chart';
+import { Dimensions } from 'react-native/Libraries/Utilities/Dimensions';
 
 export default function HomePage() {
   return (
-    <Div w={"100%"} h={"100%"} bg="gray900" >
-      <Div flexDir="row" w="100%" flexWrap="wrap" pt={"10%"}>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} p={3} rounded="md">
+    <Div w={'100%'} h={"100%"} bg="gray900">
+      <Div flexDir="row" w="100%" flexWrap="wrap" justifyContent ="center" alignItems='center' mt={"15%"}>
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} p={3} rounded="md" justifyContent ="center" alignItems='center'>
           <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W1
           </Text>
-          <Div
-            bg="blue300"
-            borderColor="blue800"
-            w={50}
-            h={50}
-            mx={6}
-            my={4}
-            rounded="100%"
-            borderWidth={2}
-          ></Div>
+          <Piechart />
         </Div>
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
@@ -34,7 +27,7 @@ export default function HomePage() {
       <Header
         position="absolute"
         bottom={0}
-        w={"100%"}
+        w={'100%'}
         h={85}
         p="lg"
         alignment="left"
@@ -65,7 +58,9 @@ export default function HomePage() {
         }
       >
         <Div m={5} ml={10}>
-          <Input mt={-60} mb={10} w={250}>yes</Input>
+          <Input mt={-60} mb={10} w={250}>
+            yes
+          </Input>
           <Text color="black" fontSize="3xl" fontWeight="bold">
             Washer 1
           </Text>
