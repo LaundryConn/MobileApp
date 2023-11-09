@@ -15,6 +15,9 @@ export default function Piechart({loadtime: number}) {
     if (number >= 0.75){
       return (opacity = 1) => `rgba(0, 128, 0, ${opacity})`
     }
+    if (number >= 0.35){
+      return (opacity = 1) => `rgba(255, 165, 0, ${opacity})`
+    }
     else {
       return (opacity = 1) => `rgba(255, 0, 0, ${opacity})`
     }

@@ -1,8 +1,11 @@
 import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
 import Piechart from "../utils/Pie_chart";
 import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
+import { useState } from "react";
 
 export default function HomePage() {
+  var washer_example = [0.8, 0.7, 0.7, 1, .5]
+  const [washer, setWasher] = useState<number>();
   return (
     <Div w={"100%"} h={"100%"} bg="gray900">
       <Div
@@ -13,7 +16,9 @@ export default function HomePage() {
         alignItems="center"
         mt={"15%"}
       >
-        <Div
+        {washer_example.map((washer) => {
+          return (
+            <Div
           shadow="2xl"
           bg="white"
           h={100}
@@ -23,39 +28,15 @@ export default function HomePage() {
           rounded="md"
           justifyContent="center"
           alignItems="center"
+          onClick={e => setWasher(washer)}
         >
           <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W1
           </Text>
-          <Piechart loadtime = {0.75}/>
+          <Piechart loadtime = {washer}/>
         </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md"  justifyContent="center"alignItems="center">
-          
-        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-            W2
-          </Text>
-          <Piechart loadtime = {0.7}/>
-        </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" justifyContent="center"alignItems="center">
-        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-            W3
-          </Text>
-          <Piechart loadtime = {0.7}/>
-        </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" justifyContent="center"alignItems="center">
-        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-            W4
-          </Text>
-          <Piechart loadtime = {1}/>
-        </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+          )
+          })}
       </Div>
       <Header
         position="absolute"
@@ -73,7 +54,7 @@ export default function HomePage() {
             mx={5}
             mt={-75}
             rounded="md"
-          />
+          ></Div>
         }
         suffix={
           <Button bg="transparent">
