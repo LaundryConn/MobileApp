@@ -1,12 +1,29 @@
-import { Text, Div, Button, Header, Icon, Input } from 'react-native-magnus';
-import Piechart from '../utils/Pie_chart';
-import { Dimensions } from 'react-native/Libraries/Utilities/Dimensions';
+import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
+import Piechart from "../utils/Pie_chart";
+import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
 
 export default function HomePage() {
   return (
-    <Div w={'100%'} h={"100%"} bg="gray900">
-      <Div flexDir="row" w="100%" flexWrap="wrap" justifyContent ="center" alignItems='center' mt={"15%"}>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} p={3} rounded="md" justifyContent ="center" alignItems='center'>
+    <Div w={"100%"} h={"100%"} bg="gray900">
+      <Div
+        flexDir="row"
+        w="100%"
+        flexWrap="wrap"
+        justifyContent="center"
+        alignItems="center"
+        mt={"15%"}
+      >
+        <Div
+          shadow="2xl"
+          bg="white"
+          h={100}
+          w={70}
+          m={11}
+          p={3}
+          rounded="md"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W1
           </Text>
@@ -27,7 +44,7 @@ export default function HomePage() {
       <Header
         position="absolute"
         bottom={0}
-        w={'100%'}
+        w={"100%"}
         h={85}
         p="lg"
         alignment="left"
