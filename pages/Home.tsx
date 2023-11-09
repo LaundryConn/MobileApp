@@ -2,10 +2,10 @@ import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
 import Piechart from "../utils/Pie_chart";
 import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
 import { useNavigate } from "react-router-native";
+import SelectTime from "../utils/SelectTime";
 
 export default function HomePage() {
   const navigate = useNavigate();
-
 
   return (
     <Div w={"100%"} h={"100%"} bg="gray900">
@@ -31,26 +31,52 @@ export default function HomePage() {
           <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W1
           </Text>
-          <Piechart loadtime = {0.75}/>
+          <Piechart loadtime={0.75} />
         </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md"  justifyContent="center"alignItems="center">
-          
-        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+        <Div
+          shadow="2xl"
+          bg="white"
+          h={100}
+          w={70}
+          m={11}
+          rounded="md"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W2
           </Text>
-          <Piechart loadtime = {0.7}/>
+          <Piechart loadtime={0.7} />
         </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" justifyContent="center"alignItems="center">
-        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+        <Div
+          shadow="2xl"
+          bg="white"
+          h={100}
+          w={70}
+          m={11}
+          rounded="md"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W3
           </Text>
-          <Piechart loadtime = {0.7}/>
+          <Piechart loadtime={0.7} />
         </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" justifyContent="center"alignItems="center">
-        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+        <Div
+          shadow="2xl"
+          bg="white"
+          h={100}
+          w={70}
+          m={11}
+          rounded="md"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W4
           </Text>
-          <Piechart loadtime = {1}/>
+          <Piechart loadtime={1} />
         </Div>
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
@@ -107,19 +133,8 @@ export default function HomePage() {
             Washer 1
           </Text>
           <Div flexDir="row">
-            <Icon
-              name="bell"
-              fontFamily="Feather"
-              fontSize={20}
-              color="red500"
-              bg="red200"
-              borderColor="red500"
-              borderWidth={1}
-              h={40}
-              w={40}
-              m={3}
-              rounded="md"
-            />
+            <SelectTime />
+            <SelectTime />
             <Icon
               name="check-circle"
               fontFamily="Feather"
