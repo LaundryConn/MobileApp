@@ -1,96 +1,47 @@
-import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
-import Piechart from "../utils/Pie_chart";
-import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
-import { useNavigate } from "react-router-native";
+import { Text, Div, Button, Header, Icon, Input } from 'react-native-magnus';
+import Piechart from '../utils/Pie_chart';
+import { Dimensions } from 'react-native/Libraries/Utilities/Dimensions';
+import { useNavigate } from 'react-router-native';
 import SelectTime from "../utils/SelectTime";
 
 export default function HomePage() {
+  const washer_example = [0.5, 0.75, 0.25, 1];
   const navigate = useNavigate();
-
   return (
-    <Div w={"100%"} h={"100%"} bg="gray900">
+    <Div w={'100%'} h={'100%'} bg="gray900">
       <Div
         flexDir="row"
         w="100%"
         flexWrap="wrap"
         justifyContent="center"
         alignItems="center"
-        mt={"15%"}
+        mt={'15%'}
       >
-        <Div
-          shadow="2xl"
-          bg="white"
-          h={100}
-          w={70}
-          m={11}
-          p={3}
-          rounded="md"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-            W1
-          </Text>
-          <Piechart loadtime={0.75} />
-        </Div>
-        <Div
-          shadow="2xl"
-          bg="white"
-          h={100}
-          w={70}
-          m={11}
-          rounded="md"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-            W2
-          </Text>
-          <Piechart loadtime={0.7} />
-        </Div>
-        <Div
-          shadow="2xl"
-          bg="white"
-          h={100}
-          w={70}
-          m={11}
-          rounded="md"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-            W3
-          </Text>
-          <Piechart loadtime={0.7} />
-        </Div>
-        <Div
-          shadow="2xl"
-          bg="white"
-          h={100}
-          w={70}
-          m={11}
-          rounded="md"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-            W4
-          </Text>
-          <Piechart loadtime={1} />
-        </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        {washer_example.map((washer) => {
+          return (
+            <Div
+              shadow="2xl"
+              bg="white"
+              h={100}
+              w={70}
+              m={11}
+              p={3}
+              rounded="md"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+                W1
+              </Text>
+              <Piechart loadtime={washer} />
+            </Div>
+          );
+        })}
       </Div>
       <Header
         position="absolute"
         bottom={0}
-        w={"100%"}
+        w={'100%'}
         h={85}
         p="lg"
         alignment="left"
@@ -103,13 +54,13 @@ export default function HomePage() {
             mx={5}
             mt={-75}
             rounded="md"
-          />
+          ></Div>
         }
         suffix={
           <Button
             bg="transparent"
             onPress={() => {
-              navigate("/settings");
+              navigate('/settings');
             }}
           >
             <Icon
