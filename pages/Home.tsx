@@ -27,11 +27,27 @@ export default function HomePage() {
           <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W1
           </Text>
-          <Piechart />
+          <Piechart loadtime = {0.75}/>
         </Div>
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md"  justifyContent="center"alignItems="center">
+          
+        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+            W2
+          </Text>
+          <Piechart loadtime = {0.7}/>
+        </Div>
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" justifyContent="center"alignItems="center">
+        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+            W3
+          </Text>
+          <Piechart loadtime = {0.7}/>
+        </Div>
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" justifyContent="center"alignItems="center">
+        <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+            W4
+          </Text>
+          <Piechart loadtime = {1}/>
+        </Div>
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
