@@ -1,8 +1,12 @@
 import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
 import Piechart from "../utils/Pie_chart";
 import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
+import { useNavigate } from "react-router-native";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
+
   return (
     <Div w={"100%"} h={"100%"} bg="gray900">
       <Div
@@ -60,24 +64,29 @@ export default function HomePage() {
           />
         }
         suffix={
-          <Button bg="transparent">
+          <Button
+            bg="transparent"
+            onPress={() => {
+              navigate("/settings");
+            }}
+          >
             <Icon
               name="settings"
               fontFamily="Feather"
               color="black"
               bg="white"
+              borderColor="black"
+              borderWidth={1}
               h={50}
               w={50}
-              fontSize={40}
-              m={3}
+              fontSize={30}
+              m={2}
             />
           </Button>
         }
       >
         <Div m={5} ml={10}>
-          <Input mt={-60} mb={10} w={250}>
-            yes
-          </Input>
+          <Input mt={-65} mb={10} w={240}></Input>
           <Text color="black" fontSize="3xl" fontWeight="bold">
             Washer 1
           </Text>

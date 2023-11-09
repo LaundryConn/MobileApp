@@ -11,7 +11,6 @@ export default function Login() {
       justifyContent={"center"}
       alignItems={"center"}
     >
-      
       <Image source={require("../assets/logo_padding.png")} h={300} w={300} />
       <Button
         onPress={() => {
@@ -27,11 +26,14 @@ export default function Login() {
           Sign in with NetId
         </Text>
       </Button>
-      <Text color="white" m={10}>
+      <Text
+        color="white"
+        m={10}
+        onPress={() => {
+          navigate("/dashboard");
+        }}
+      >
         continue without login
-      </Text>
-      <Text color="white" style={{ transform: "translate(100px,0px)" }}>
-        Coming soon
       </Text>
     </Div>
   );
