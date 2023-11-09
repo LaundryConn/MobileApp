@@ -1,44 +1,46 @@
-import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
-import Piechart from "../utils/Pie_chart";
-import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
+import { Text, Div, Button, Header, Icon, Input } from 'react-native-magnus';
+import Piechart from '../utils/Pie_chart';
+import { Dimensions } from 'react-native/Libraries/Utilities/Dimensions';
+import { useNavigate } from 'react-router-native';
 
 export default function HomePage() {
+  const washer_example = [0.5, 0.75, 0.25, 1];
+  const navigate = useNavigate();
   return (
-    <Div w={"100%"} h={"100%"} bg="gray900">
+    <Div w={'100%'} h={'100%'} bg="gray900">
       <Div
         flexDir="row"
         w="100%"
         flexWrap="wrap"
         justifyContent="center"
         alignItems="center"
-        mt={"15%"}
+        mt={'15%'}
       >
         {washer_example.map((washer) => {
           return (
             <Div
-          shadow="2xl"
-          bg="white"
-          h={100}
-          w={70}
-          m={11}
-          p={3}
-          rounded="md"
-          justifyContent="center"
-          alignItems="center"
-          onClick={e => setWasher(washer)}
-        >
-          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-            W1
-          </Text>
-          <Piechart loadtime = {washer}/>
-        </Div>
-          )
-          })}
+              shadow="2xl"
+              bg="white"
+              h={100}
+              w={70}
+              m={11}
+              p={3}
+              rounded="md"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+                W1
+              </Text>
+              <Piechart loadtime={washer} />
+            </Div>
+          );
+        })}
       </Div>
       <Header
         position="absolute"
         bottom={0}
-        w={"100%"}
+        w={'100%'}
         h={85}
         p="lg"
         alignment="left"
@@ -57,7 +59,7 @@ export default function HomePage() {
           <Button
             bg="transparent"
             onPress={() => {
-              navigate("/settings");
+              navigate('/settings');
             }}
           >
             <Icon
