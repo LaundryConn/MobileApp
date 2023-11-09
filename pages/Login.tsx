@@ -27,20 +27,8 @@ export default function Login() {
         </Text>
       </Button>
       <Text color="white" m={10}>
-        or
+        continue without login
       </Text>
-      <Button
-        onPress={() => {
-          // handle sign in with Google logic
-        }}
-        bg="black"
-        alignSelf="center"
-        fontSize={20}
-        fontWeight="bold"
-        w={300}
-      >
-        Sign in with Google
-      </Button>
       <Text color="white" style={{ transform: "translate(100px,0px)" }}>
         Coming soon
       </Text>

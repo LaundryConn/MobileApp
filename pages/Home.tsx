@@ -2,8 +2,8 @@ import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
 
 export default function HomePage() {
   return (
-    <Div w={"100%"} bg="gray900">
-      <Div flexDir="row" w="100%" flexWrap="wrap">
+    <Div w={"100%"} h={"100%"} bg="gray900" >
+      <Div flexDir="row" w="100%" flexWrap="wrap" pt={"10%"}>
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} p={3} rounded="md">
           <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
             W1
