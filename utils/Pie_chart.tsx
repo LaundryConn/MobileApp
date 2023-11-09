@@ -6,17 +6,28 @@ import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
 
 
 
-export default function Piechart() {
+export default function Piechart({loadtime: number}) {
+
+  function progresscolor(){
+    if (number == 1){
+      return (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+    }
+    if (number >= 0.75){
+      return (opacity = 1) => `rgba(0, 128, 0, ${opacity})`
+    }
+    else {
+      return (opacity = 1) => `rgba(255, 0, 0, ${opacity})`
+    }
+  }
 
   const data = {
-    labels: ["Swim"], // optional
-    data: [0.1]
+    data: [number]
   };
   
   const chartConfig = {
     backgroundGradientFrom: "white",
     backgroundGradientTo: "white",
-    color: (opacity = 1) => `rgba(0, 128, 0, ${opacity})`,
+    color: progresscolor(),
   };
   
  
