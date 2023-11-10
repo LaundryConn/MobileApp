@@ -9,7 +9,7 @@ import {
   ThemeProvider,
 } from "react-native-magnus";
 
-export default function SelectTime() {
+export default function ReportBroken() {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -18,12 +18,12 @@ export default function SelectTime() {
       <SafeAreaView style={{ flex: 1 }}>
         <Button bg="transparent" w={40} h={40} m={0} block onPress={() => setVisible(true)}>
           <Icon
-            name="bell"
+            name="flag"
             fontFamily="Feather"
             fontSize={20}
-            color="blue500"
-            bg="blue200"
-            borderColor="blue500"
+            color="red500"
+            bg="red200"
+            borderColor="red500"
             borderWidth={1}
             h={40}
             w={40}
