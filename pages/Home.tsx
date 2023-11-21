@@ -1,23 +1,13 @@
 import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
 import Piechart from "../utils/Pie_chart";
+import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
 import { useNavigate } from "react-router-native";
 import SelectTime from "../utils/SelectTime";
-import ReportBroken from "../utils/ReportBroken";
-import { useFetchUser, useWashersStatus } from "../utils/Utilities";
-// import { SafeAreaView } from "react-native";
 
 export default function HomePage() {
-  const washer_example = [0.5, 0.75, 0.25, 1];
   const navigate = useNavigate();
 
-  const myid = "4520eb4f-a623-4ae2-882b-8e01863e6477";
-  const halldata = useFetchUser(myid);
-
-  // const washerdata = useWashersStatus(halldata.hall_uuid)
-  // const dryerdata = useDryerStatus(halldata.hall_uuid)
-
   return (
-    // <SafeAreaView>
     <Div w={"100%"} h={"100%"} bg="gray900">
       <Div
         flexDir="row"
@@ -25,34 +15,83 @@ export default function HomePage() {
         flexWrap="wrap"
         justifyContent="center"
         alignItems="center"
-        mt={"10%"}
+        mt={"15%"}
       >
-        {washer_example.map((washer) => {
-          return (
-            <Div
-              shadow="2xl"
-              bg="white"
-              h={100}
-              w={70}
-              m={11}
-              p={3}
-              rounded="md"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-                W1
-              </Text>
-              <Piechart loadtime={washer} />
-            </Div>
-          );
-        })}
+        <Div
+          shadow="2xl"
+          bg="white"
+          h={100}
+          w={70}
+          m={11}
+          p={3}
+          rounded="md"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+            W1
+          </Text>
+          <Piechart loadtime={0.75} />
+        </Div>
+        <Div
+          shadow="2xl"
+          bg="white"
+          h={100}
+          w={70}
+          m={11}
+          rounded="md"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+            W2
+          </Text>
+          <Piechart loadtime={0.7} />
+        </Div>
+        <Div
+          shadow="2xl"
+          bg="white"
+          h={100}
+          w={70}
+          m={11}
+          rounded="md"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+            W3
+          </Text>
+          <Piechart loadtime={0.7} />
+        </Div>
+        <Div
+          shadow="2xl"
+          bg="white"
+          h={100}
+          w={70}
+          m={11}
+          rounded="md"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
+            W4
+          </Text>
+          <Piechart loadtime={1} />
+        </Div>
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
+        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
       </Div>
       <Header
         position="absolute"
         bottom={0}
         w={"100%"}
-        h={125}
+        h={85}
         p="lg"
         alignment="left"
         prefix={
@@ -64,7 +103,7 @@ export default function HomePage() {
             mx={5}
             mt={-75}
             rounded="md"
-          ></Div>
+          />
         }
         suffix={
           <Button
@@ -95,29 +134,29 @@ export default function HomePage() {
           </Text>
           <Div flexDir="row">
             <SelectTime />
-            <ReportBroken />
-            {/* <Icon
-                name="check-circle"
-                fontFamily="Feather"
-                fontSize={20}
-                color="white"
-                bg="blue500"
-                h={40}
-                w={40}
-                m={3}
-                rounded="md"
-              />
-              <Icon
-                name="edit"
-                fontFamily="Feather"
-                fontSize={20}
-                color="white"
-                bg="gray700"
-                h={40}
-                w={40}
-                m={3}
-                rounded="md"
-              /> */}
+            <SelectTime />
+            <Icon
+              name="check-circle"
+              fontFamily="Feather"
+              fontSize={20}
+              color="white"
+              bg="blue500"
+              h={40}
+              w={40}
+              m={3}
+              rounded="md"
+            />
+            <Icon
+              name="edit"
+              fontFamily="Feather"
+              fontSize={20}
+              color="white"
+              bg="gray700"
+              h={40}
+              w={40}
+              m={3}
+              rounded="md"
+            />
           </Div>
         </Div>
       </Header>
@@ -125,6 +164,5 @@ export default function HomePage() {
         <Text>Dashboard</Text>
       </Div>
     </Div>
-    // </SafeAreaView>
   );
 }

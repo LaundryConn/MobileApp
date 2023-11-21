@@ -1,6 +1,5 @@
 import { supabase } from "../supabase";
 import { useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type WasherStatus = {
   washer_uuid: string;
@@ -90,11 +89,3 @@ export function useFetchUser(userUuid: string) {
 //         "customer": "uconn"
 //     }
 // }
-
-export default async function useStoreData(key, value) {
-  try {
-    await AsyncStorage.setItem(key, value);
-  } catch (e) {
-    // saving error
-  }
-}
