@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { SafeAreaView, StatusBar, FlatList, Platform } from "react-native";
+import { SafeAreaView, StatusBar, FlatList, Platform, Alert } from "react-native";
 import { Div, Button, Icon, Modal, ThemeProvider } from "react-native-magnus";
 import * as Notifications from "expo-notifications";
 import * as Device from 'expo-device';
@@ -44,15 +44,23 @@ async function registerForPushNotificationsAsync() {
   return token.data;
 }
 
-
-
-async function schedulePushNotification() {
+async function schedulePushNotificationTest() {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "Title Test",
       body: 'Body Test',
     },
-    trigger: { seconds: 5 },
+    trigger: { seconds: 2 },
+  });
+}
+
+async function MachineReserve() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Title Test 2",
+      body: 'Placeholder for Reserving',
+    },
+    trigger: { seconds: 2 },
   });
 }
 
@@ -117,7 +125,7 @@ export default function SelectTime() {
           </Button>
 
           <Button
-            bg="gray400"
+            bg="blue400"
             h={35}
             w={35}
             position="absolute"
@@ -125,12 +133,25 @@ export default function SelectTime() {
             right={75}
             rounded="circle"
             onPress={async () => {
-              await schedulePushNotification();
+              await schedulePushNotificationTest();
             }}
           >
-            <Icon color="#a9a7ab" name="close" />
+            <Icon color="#a9a7ab" name="notification" />
           </Button>
 
+          <Button
+            bg="gray400"
+            h={50}
+            w={225}
+            position="absolute"
+            top={450}
+            right={95}
+            onPress={async () => {
+              await MachineReserve();
+            }}
+          >
+            <Icon color="#a9a7ab" name="clockcircle" />
+          </Button>
         </Modal>
       </SafeAreaView>
     </ThemeProvider>

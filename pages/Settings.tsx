@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-native";
 import { useFetchUser } from "../utils/Utilities";
 
 export default function SettingsPage() {
-  const [selectValue, setSelectedValue] = useState<string>("select your hall");
+  const [selectValue, setSelectedValue] = useState<string>("Select your hall");
   const selectRef = useRef(null);
   const navigate = useNavigate();
 

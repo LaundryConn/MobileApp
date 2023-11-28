@@ -84,8 +84,6 @@ export default function HomePage() {
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
         <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
-        <Div shadow="2xl" bg="white" h={100} w={70} m={11} rounded="md" />
       </Div>
       <Header
         position="absolute"
