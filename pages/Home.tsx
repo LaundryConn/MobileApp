@@ -132,7 +132,6 @@ export default function HomePage() {
           </Text>
           <Div flexDir="row">
             <SelectTime />
-            <SelectTime />
             <Icon
               name="check-circle"
               fontFamily="Feather"
