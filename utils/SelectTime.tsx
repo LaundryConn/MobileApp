@@ -4,6 +4,7 @@ import { Div, Button, Icon, Modal, ThemeProvider } from "react-native-magnus";
 import * as Notifications from "expo-notifications";
 import * as Device from 'expo-device';
 
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -147,6 +148,7 @@ export default function SelectTime() {
             top={450}
             right={95}
             onPress={async () => {
+              setVisible(false);
               await MachineReserve();
             }}
           >

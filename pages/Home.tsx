@@ -3,6 +3,19 @@ import Piechart from "../utils/Pie_chart";
 import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
 import { useNavigate } from "react-router-native";
 import SelectTime from "../utils/SelectTime";
+import { Pressable } from 'react-native'
+
+const Washers = ({ onPress, buttonText }) => (
+  <Pressable
+  style={({ pressed }) => [
+    { opacity: pressed ? 0.5 : 1.0 }
+  ]}
+  onPress={() => SelectTime()}
+>
+  <Text>{buttonText}</Text>
+</Pressable>
+
+)
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -63,6 +76,7 @@ export default function HomePage() {
           </Text>
           <Piechart loadtime={0.7} />
         </Div>
+        <Washers title/>
         <Div
           shadow="2xl"
           bg="white"
