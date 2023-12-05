@@ -7,6 +7,7 @@ import {
   Icon,
   Modal,
   ThemeProvider,
+  Input,
 } from "react-native-magnus";
 
 export default function ReportBroken({ selectedMachine }) {
@@ -51,6 +52,12 @@ export default function ReportBroken({ selectedMachine }) {
             <Text fontWeight="bold" fontSize="4xl">
               {selectedMachine && selectedMachine[0]}
             </Text>
+            <Text mt={10} fontSize="lg" color="black">
+              Is this machine broken?
+            </Text>
+            <Input mt={10} mb={10} w={240} pb={300}></Input>
+            <Button w={240} h={50} bg="blue500" 
+            >Submit</Button>
           </Div>
         </Modal>
       </SafeAreaView>
