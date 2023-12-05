@@ -85,14 +85,14 @@ export default function SelectTime() {
     <ThemeProvider>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={{ flex: 1 }}>
-        <Button w={40} h={40} m={0} block onPress={() => setVisible(true)}>
+        <Button w={40} h={40} bg="transparent" m={2} block onPress={() => setVisible(true)}>
           <Icon
             name="bell"
             fontFamily="Feather"
             fontSize={20}
-            color="red500"
-            bg="red200"
-            borderColor="red500"
+            color="blue500"
+            bg="blue200"
+            borderColor="blue500"
             borderWidth={1}
             h={40}
             w={40}

@@ -17,7 +17,7 @@ export default function ReportBroken({ selectedMachine }) {
     <ThemeProvider>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={{ flex: 1 }}>
-        <Button bg="transparent" w={40} h={40} m={0} block onPress={() => setVisible(true)}>
+        <Button bg="transparent" w={40} h={40} m={2} block onPress={() => setVisible(true)}>
           <Icon
             name="flag"
             fontFamily="Feather"
@@ -50,7 +50,7 @@ export default function ReportBroken({ selectedMachine }) {
           
           <Div m={50}>
             <Text fontWeight="bold" fontSize="4xl">
-              {selectedMachine && selectedMachine[0]}
+              {selectedMachine.machine}
             </Text>
             <Text mt={10} fontSize="lg" color="black">
               Is this machine broken?

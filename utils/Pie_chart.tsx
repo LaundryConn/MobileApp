@@ -6,7 +6,7 @@ import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
 
 
 
-export default function Piechart({loadtime: number}) {
+export default function Piechart({loadtime: number, size:sizeNum}) {
 
   function progresscolor(){
     if (number == 1){
@@ -38,10 +38,10 @@ export default function Piechart({loadtime: number}) {
       <View >
         <ProgressChart
           data={data}
-          width={50}
-          height={50}
+          width={sizeNum*3}
+          height={sizeNum*3}
           strokeWidth={6.5}
-          radius={20}
+          radius={sizeNum}
           chartConfig={chartConfig}
           hideLegend={true}
           
