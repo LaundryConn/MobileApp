@@ -139,12 +139,12 @@ export default function HomePage() {
               p={200}
               placeholder="leave a message for the next person"
             ></Input> */}
-            <TextInput
+            {/* <TextInput
               multiline={true}
               numberOfLines={4}
               onChangeText={(text) => this.setState({ text })}
               value={this.state.text}
-            />
+            /> */}
           </Div>
         </Div>
       </Header>
