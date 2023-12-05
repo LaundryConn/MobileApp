@@ -9,7 +9,7 @@ import {
   ThemeProvider,
 } from "react-native-magnus";
 
-export default function ReportBroken() {
+export default function ReportBroken({ selectedMachine }) {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -49,7 +49,7 @@ export default function ReportBroken() {
           
           <Div m={50}>
             <Text fontWeight="bold" fontSize="4xl">
-              Washer 1
+              {selectedMachine && selectedMachine[0]}
             </Text>
           </Div>
         </Modal>
