@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-native";
 import SelectTime from "../utils/SelectTime";
 import { useState } from "react";
 import ReportBroken from "../utils/ReportBroken";
+import Messages from "../utils/Messages"
 
 interface SupbaseLog {
   id: number;
@@ -132,20 +133,7 @@ export default function HomePage() {
             <SelectTime />
             <ReportBroken selectedMachine={selectMachine} />
           </Div>
-
-          <Div w={190}>
-            {/* <Input
-              m={10}
-              p={200}
-              placeholder="leave a message for the next person"
-            ></Input> */}
-            {/* <TextInput
-              multiline={true}
-              numberOfLines={4}
-              onChangeText={(text) => this.setState({ text })}
-              value={this.state.text}
-            /> */}
-          </Div>
+          <Messages /> 
         </Div>
       </Header>
       <Div m={10}>
