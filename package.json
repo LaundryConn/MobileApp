@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.0",
+    "@react-native-async-storage/async-storage": "1.18.2",
     "@supabase/supabase-js": "^2.38.4",
     "chart.js": "^4.4.0",
     "expo": "~49.0.15",
@@ -25,6 +26,7 @@
     "react-native-magnus": "^1.0.63",
     "react-native-modal": "^13.0.1",
     "react-native-svg": "13.9.0",
+    "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^10.0.1",
     "react-native-web": "^0.19.9",
     "react-router-native": "^6.17.0"

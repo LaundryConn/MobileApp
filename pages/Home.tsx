@@ -1,61 +1,217 @@
-import { Text, Div, Button, Header, Icon, Input } from "react-native-magnus";
+import { Text, Div, Button, Header, Icon, Select } from "react-native-magnus";
 import Piechart from "../utils/Pie_chart";
-import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
+// import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
 import { useNavigate } from "react-router-native";
 import SelectTime from "../utils/SelectTime";
-import { useState } from "react";
 import ReportBroken from "../utils/ReportBroken";
-import Messages from "../utils/Messages"
+import Messages from "../utils/Messages";
+import React, { useState, useRef, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { supabase } from "../supabase";
 
 interface SupbaseLog {
   id: number;
-  machine: string;
+  created_at: string;
+  payload: string;
+  machine_uuid: string;
+}
+
+interface SupbaseMessage {
+  id: number;
+  created_at: string;
+  message: string;
+  user_uuid: string;
+  machine_uuid: string;
+}
+
+interface SupbaseMachine {
+  id: number;
+  created_at: string;
+  machine_uuid: string;
+  type: string;
+  hall_id: string;
+}
+
+interface DisplayMachines {
+  id: number;
+  uuid: string;
+  name: string;
   time: number;
   status: string;
+  confidence: number;
+}
+
+interface Hall {
+  hall_uuid: string;
+  hall_name: string;
 }
 
 export default function HomePage() {
-  const washer_data: SupbaseLog[] = [
-    { id: 1, machine: "W1", time: 1, status: "active" },
-    { id: 2, machine: "W2", time: 0.3, status: "active" },
-    { id: 3, machine: "W3", time: 0.9, status: "active" },
-    { id: 4, machine: "W4", time: 1, status: "active" },
-  ];
+  // List of Halls (only populates if chaning halls)
+  const [hallSelection, setHallSelection] = useState<Hall[]>([
+    { hall_uuid: "aadbd2f3-016a-4c32-b3ae-0a964acaa797", hall_name: "Snow" },
+  ]);
 
-  const navigate = useNavigate();
-  const [selectMachine, setSelectedMachine] = useState<SupbaseLog>(
-    washer_data[0]
-  );
+  // Selected Hall
+  const [hallId, setHallId] = useState<string>();
+  const [hallName, setHallName] = useState(null);
+
+  // List of log data of Machines for Selected Hall
+  const [logData, setLogData] = useState<SupbaseLog[]>([]);
+  const [messageData, setMessageData] = useState<SupbaseMessage[]>([]);
+
+  const [machineRefinedData, setMachineRefinedData] = useState<
+    DisplayMachines[]
+  >([{ id: 1, uuid: "960791f8-622c-4c76-8eae-d59cd400e815", name: "", time: 0, status: "", confidence: 0 }]);
+  // Selected Machine
+  const [machineSelected, setMachineSelected] = useState<DisplayMachines>({
+    id: 0,
+    uuid: "960791f8-622c-4c76-8eae-d59cd400e815",
+    name: "",
+    time: 0,
+    status: "",
+    confidence: 0,
+  });
+
+  const fetchHallsDataFromSupabase = async () => {
+    try {
+      // Fetch data from the 'halls' table
+      const { data, error } = await supabase
+        .from("halls")
+        .select("hall_uuid,hall_name")
+        .eq("customer", "uconn");
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        // console.log(data);
+        setHallSelection(data as Hall[]);
+      }
+    } catch (error) {
+      console.error("Error fetching data from Supabase:", error.message);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    fetchHallsDataFromSupabase();
+    fetchHallData();
+  }, []);
+
+  async function fetchHallData() {
+    const storedHallId = await AsyncStorage.getItem("hall_id");
+    const storedHallName = await AsyncStorage.getItem("hall_name");
+
+    if (storedHallId && storedHallName) {
+      // Data is present in async storage, use it
+      setHallId(storedHallId);
+      setHallName(storedHallName);
+      consolidateData(storedHallId);
+    } else {
+    }
+  }
+
+  async function fetchLogs(hallId: string | null) {
+    const { data, error } = await supabase.rpc("get_logs_by_hall_id", {
+      p_hall_uuid: hallId,
+    });
+
+    console.log(data);
+
+    if (data) {
+      setLogData(data);
+    }
+    if (error) {
+      throw error;
+    }
+  }
+
+  async function fetchMessages(hallId: string | null) {
+    console.log(hallId);
+    const { data, error } = await supabase.rpc("get_messages_by_hall_id", {
+      p_hall_uuid: hallId,
+    });
+
+    console.log(data);
+
+    if (data) {
+      setMessageData(data);
+    }
+    if (error) {
+      throw error;
+    }
+  }
+
+  function consolidateData(hallId: string | null) {
+    var logs = fetchLogs(hallId);
+    var messages = fetchMessages(hallId);
+    // Create a new array of machines
+    const machines: DisplayMachines[] = [
+      { id: 1, uuid: "960791f8-622c-4c76-8eae-d59cd400e815", name: "", time: 0, status: "", confidence: 0 },
+    ];
+
+    // Loop through the log data
+    for (const log of logData) {
+      // Check if the machine is already in the machines array
+      console.log(log);
+    }
+
+    // Return the machines array
+    return setMachineRefinedData(machines);
+  }
+
+  const onSelectOption = (value: any) => {
+    // Save the hall_id and hall_name to async storage
+    AsyncStorage.setItem("hall_id", value.split(" ")[1]);
+    AsyncStorage.setItem("hall_name", value.split(" ")[0]);
+
+    setHallId(value.split(" ")[1]);
+    setHallName(value.split(" ")[0]);
+    consolidateData(value.split(" ")[1]);
+  };
+  const selectRef = useRef(null);
+
+  function sendMessage(machine_uuid, content) {}
 
   return (
     <Div w={"100%"} h={"100%"} bg="gray900">
-      <Div ml={10} mt={"15%"} flexDir="row">
-        <Text color="white" fontSize={36} fontWeight="800">
-          {" "}
-          Snow Hall{" "}
-        </Text>
+      <Div m={10} mt={"10%"} flexDir="row">
         <Button
-          bg="blue200"
-          onPress={() => {
-            navigate("/settings");
-          }}
-          borderColor="black"
+          flex={1}
+          block
           borderWidth={1}
-          m={2}
-          p={0}
-          w={40}
-          h={40}
+          mx="xl"
+          bg="white"
+          color="gray900"
+          borderColor="gray300"
+          onPress={() => {
+            if (selectRef.current) {
+              selectRef.current.open();
+            }
+          }}
         >
-          <Icon
-            name="settings"
-            fontFamily="Feather"
-            color="black"
-            h={40}
-            w={40}
-            m={2}
-            fontSize={20}
-          />
+          {hallId?.length ? hallId.toString() : "Select Your Hall"}
         </Button>
+
+        <Select
+          onSelect={onSelectOption}
+          ref={selectRef}
+          value={hallId}
+          title="Only the following dorms have the system set up:"
+          message="email reslife at livingoncampus@uconn.edu if you enjoy laundryconn or if you want it in your dorm!"
+          roundedTop="xl"
+          m={3}
+          data={hallSelection.map(
+            (hall) => hall.hall_name + " " + hall.hall_uuid
+          )}
+          renderItem={(item, index) => (
+            <Select.Option value={item} py="md" px="xl">
+              <Text>{item}</Text>
+            </Select.Option>
+          )}
+        />
       </Div>
       <Div
         flexDir="row"
@@ -64,7 +220,7 @@ export default function HomePage() {
         justifyContent="center"
         alignItems="center"
       >
-        {washer_data.map((washer) => {
+        {machineRefinedData.map((machine) => {
           return (
             <Button
               shadow="2xl"
@@ -74,18 +230,18 @@ export default function HomePage() {
               w={70}
               m={11}
               p={3}
-              key={washer.id}
+              key={machine.id}
               rounded="md"
               justifyContent="center"
               alignItems="center"
               onPress={() => {
-                setSelectedMachine(washer);
+                setMachineSelected(machine);
               }}
             >
               <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
-                {washer.machine}
+                {machine.name}
               </Text>
-              <Piechart loadtime={washer.time} size={20} />
+              <Piechart loadtime={machine.time} size={20} />
             </Button>
           );
         })}
@@ -107,22 +263,12 @@ export default function HomePage() {
             mt={-75}
             rounded="md"
           >
-            {selectMachine && (
-              <Div
-                // bg="white"
-                // h={200}
-                // w={100}
-                // m={16}
-                // p={3}
-                pt={16}
-                // rounded="md"
-                justifyContent="center"
-                alignItems="center"
-              >
+            {machineSelected && (
+              <Div pt={16} justifyContent="center" alignItems="center">
                 <Text color="black" fontSize="3xl" fontWeight="bold">
-                  {selectMachine.machine}
+                  {machineSelected.name}
                 </Text>
-                <Piechart loadtime={selectMachine.time} size={35} />
+                <Piechart loadtime={machineSelected.time} size={35} />
               </Div>
             )}
           </Div>
@@ -131,14 +277,11 @@ export default function HomePage() {
         <Div m={5} flexDir="row">
           <Div>
             <SelectTime />
-            <ReportBroken selectedMachine={selectMachine} />
+            <ReportBroken selectedMachine={machineSelected} />
           </Div>
-          <Messages /> 
+          <Messages selectedMachine={machineSelected} />
         </Div>
       </Header>
-      <Div m={10}>
-        <Text>Dashboard</Text>
-      </Div>
     </Div>
   );
 }
