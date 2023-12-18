@@ -1,4 +1,12 @@
-import { Text, Div, Button, Header, Icon, Select } from "react-native-magnus";
+import {
+  Text,
+  Div,
+  Button,
+  Header,
+  Icon,
+  Select,
+  Overlay,
+} from "react-native-magnus";
 import Piechart from "../utils/Pie_chart";
 // import { Dimensions } from "react-native/Libraries/Utilities/Dimensions";
 import { useNavigate } from "react-router-native";
@@ -8,6 +16,8 @@ import Messages from "../utils/Messages";
 import React, { useState, useRef, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { supabase } from "../supabase";
+import * as Device from "expo-device";
+import { TextInput } from "react-native";
 
 interface SupbaseLog {
   id: number;
@@ -62,7 +72,16 @@ export default function HomePage() {
 
   const [machineRefinedData, setMachineRefinedData] = useState<
     DisplayMachines[]
-  >([{ id: 1, uuid: "960791f8-622c-4c76-8eae-d59cd400e815", name: "", time: 0, status: "", confidence: 0 }]);
+  >([
+    {
+      id: 1,
+      uuid: "960791f8-622c-4c76-8eae-d59cd400e815",
+      name: "",
+      time: 0,
+      status: "",
+      confidence: 0,
+    },
+  ]);
   // Selected Machine
   const [machineSelected, setMachineSelected] = useState<DisplayMachines>({
     id: 0,
@@ -72,6 +91,11 @@ export default function HomePage() {
     status: "",
     confidence: 0,
   });
+
+  // information regarding person using the app
+  const deviceId = Device.osInternalBuildId;
+  const [myUUID, setMyUUID] = useState("");
+  const [myName, setMyName] = useState("");
 
   const fetchHallsDataFromSupabase = async () => {
     try {
@@ -97,19 +121,53 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchHallsDataFromSupabase();
-    fetchHallData();
+    fetchAsyncData();
   }, []);
 
-  async function fetchHallData() {
+  async function fetchAsyncData() {
     const storedHallId = await AsyncStorage.getItem("hall_id");
     const storedHallName = await AsyncStorage.getItem("hall_name");
+    const storedUUID = await AsyncStorage.getItem("uuid");
+    const myName = await AsyncStorage.getItem("name");
 
     if (storedHallId && storedHallName) {
       // Data is present in async storage, use it
       setHallId(storedHallId);
       setHallName(storedHallName);
       consolidateData(storedHallId);
+    }
+
+    if (storedUUID && myName) {
+      setMyUUID(storedUUID);
+      setMyName(myName);
     } else {
+      checkMyName();
+    }
+  }
+
+  async function checkMyName() {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("device_id", Device.osInternalBuildId);
+
+    if (data != null && data.length > 0) {
+      setMyName(data[0].name);
+      AsyncStorage.setItem("name", data[0].name);
+    } else {
+      setOverlayVisible(true);
+    }
+
+    setMyUUID(data[0].uuid);
+    setMyName(data[0].name);
+
+    if (data[0].status == 1) {
+      console.log("banned");
+    }
+
+    if (error || data?.length == 0) {
+      // Data is not present in supabase
+      setOverlayVisible(true);
     }
   }
 
@@ -149,7 +207,14 @@ export default function HomePage() {
     var messages = fetchMessages(hallId);
     // Create a new array of machines
     const machines: DisplayMachines[] = [
-      { id: 1, uuid: "960791f8-622c-4c76-8eae-d59cd400e815", name: "", time: 0, status: "", confidence: 0 },
+      {
+        id: 1,
+        uuid: "960791f8-622c-4c76-8eae-d59cd400e815",
+        name: "",
+        time: 0,
+        status: "",
+        confidence: 0,
+      },
     ];
 
     // Loop through the log data
@@ -173,7 +238,34 @@ export default function HomePage() {
   };
   const selectRef = useRef(null);
 
-  function sendMessage(machine_uuid, content) {}
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [nameInput, setNameInput] = useState("");
+
+  const handleInputChange = (input) => {
+    setNameInput(input);
+  };
+
+  const handleSubmit = async () => {
+    // setOverlayVisible(false);
+    try {
+      const { data, error } = await supabase.from("users").insert({
+        device_id: Device.osInternalBuildId,
+        name: nameInput,
+      }).select();
+      if (error) {
+        throw error;
+      } else {
+        setOverlayVisible(false);
+        setNameInput(nameInput);
+        AsyncStorage.setItem("name", nameInput);
+        setMyUUID(data[0].uuid);
+        AsyncStorage.setItem("uuid", data[0].uuid);
+        // Keyboard.dismiss();
+      }
+    } catch (error) {
+      console.error("Error inserting message:", error);
+    }
+  };
 
   return (
     <Div w={"100%"} h={"100%"} bg="gray900">
@@ -192,7 +284,7 @@ export default function HomePage() {
             }
           }}
         >
-          {hallId?.length ? hallId.toString() : "Select Your Hall"}
+          {hallName?.length ? hallName.toString() : "Select Your Hall"}
         </Button>
 
         <Select
@@ -208,7 +300,7 @@ export default function HomePage() {
           )}
           renderItem={(item, index) => (
             <Select.Option value={item} py="md" px="xl">
-              <Text>{item}</Text>
+              <Text>{item.split(" ")[0]}</Text>
             </Select.Option>
           )}
         />
@@ -274,12 +366,44 @@ export default function HomePage() {
           </Div>
         }
       >
+        <Overlay visible={overlayVisible} p="xl">
+          {/* <ActivityIndicator /> */}
+          <Text mt="md">What is your name</Text>
+          <TextInput
+            style={{
+              height: 80,
+              width: 250,
+              borderColor: "gray",
+              borderWidth: 1,
+              padding: 10,
+            }}
+            multiline={true}
+            numberOfLines={1}
+            clearTextOnFocus={true}
+            // onFocus={() => setOverlayVisible(true)}
+            onChangeText={handleInputChange}
+            value={nameInput}
+          />
+          <Button w={25} h={25} mt={-30} ml={5} onPress={handleSubmit}>
+            <Icon
+              name="send"
+              fontFamily="Feather"
+              fontSize={10}
+              color="white"
+              bg="blue500"
+              h={60}
+              w={60}
+              rounded="md"
+            />
+          </Button>
+        </Overlay>
+
         <Div m={5} flexDir="row">
           <Div>
             <SelectTime />
-            <ReportBroken selectedMachine={machineSelected} />
+            <ReportBroken selectedMachine={machineSelected} myUUID={myName} />
           </Div>
-          <Messages selectedMachine={machineSelected} />
+          <Messages selectedMachine={machineSelected} myUUID={myName} />
         </Div>
       </Header>
     </Div>

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { supabase } from "../supabase";
-import { ActivityIndicator, TextInput } from "react-native";
+import { ActivityIndicator, TextInput, TouchableOpacity } from "react-native";
 import { Input, Button, Div, Overlay, Icon, Text } from "react-native-magnus";
 import { Keyboard } from "react-native";
+import * as Device from "expo-device";
 
-export default function Messages(selectedMachine) {
+export default function Messages(selectedMachine, deviceId) {
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -15,13 +16,11 @@ export default function Messages(selectedMachine) {
   const handleSubmit = async () => {
     // setOverlayVisible(false);
     try {
-      const { data, error } = await supabase
-        .from("messages")
-        .insert({
-          message: message,
-          machine_uuid: selectedMachine.uuid,
-          user_uuid: "4520eb4f-a623-4ae2-882b-8e01863e6477",
-        });
+      const { data, error } = await supabase.from("messages").insert({
+        message: message,
+        machine_uuid: selectedMachine.uuid,
+        user_uuid: "4520eb4f-a623-4ae2-882b-8e01863e6477",
+      });
       if (error) {
         throw error;
       } else {
@@ -36,16 +35,25 @@ export default function Messages(selectedMachine) {
 
   return (
     <Div w={180} m={5}>
-      <TextInput
-        style={{ height: 80, width: 180, borderColor: "gray", borderWidth: 1 }}
-        multiline={true}
-        numberOfLines={4}
-        placeholder="Enter a message like 'The machine drys slowly or please put the clothes in the blue basket when done"
-        clearTextOnFocus={true}
-        // onChangeText={() => setOverlayVisible(true)}
-        onChange={() => setOverlayVisible(true)}
-        value={message}
-      />
+      <TouchableOpacity onPress={() => setOverlayVisible(true)}>
+        <TextInput
+          style={{
+            height: 80,
+            width: 180,
+            borderColor: "gray",
+            borderWidth: 1,
+            fontSize: 10,
+            padding: 10,
+          }}
+          multiline={true}
+          numberOfLines={4}
+          placeholder="Enter a message like 'The machine drys well in 60 mins or please put the clothes in the blue basket when done"
+          clearTextOnFocus={true}
+          pointerEvents="none"
+          placeholderTextColor="gray"
+          value={message}
+        />
+      </TouchableOpacity>
       <Overlay visible={overlayVisible} p="xl">
         {/* <ActivityIndicator /> */}
         <Text mt="md">Send a message to the next person</Text>
@@ -54,6 +62,7 @@ export default function Messages(selectedMachine) {
             height: 80,
             width: 250,
             borderColor: "gray",
+            padding: 10,
             borderWidth: 1,
           }}
           multiline={true}

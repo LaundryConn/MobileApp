@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, StatusBar, FlatList } from "react-native";
+import { SafeAreaView, StatusBar, FlatList, TextInput } from "react-native";
 import {
   Div,
   Text,
@@ -9,15 +9,46 @@ import {
   ThemeProvider,
   Input,
 } from "react-native-magnus";
+import { supabase } from "../supabase";
 
-export default function ReportBroken({ selectedMachine }) {
+export default function ReportBroken(selectedMachine, deviceId) {
   const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleInputChange = (input) => {
+    setMessage(input);
+  };
+
+  const handleSubmit = async () => {
+    // setOverlayVisible(false);
+    try {
+      const { data, error } = await supabase.from("messages").insert({
+        message: message,
+        machine_uuid: selectedMachine.uuid,
+        user_uuid: "4520eb4f-a623-4ae2-882b-8e01863e6477",
+      });
+      if (error) {
+        throw error;
+      } else {
+        // Keyboard.dismiss();
+      }
+    } catch (error) {
+      console.error("Error inserting message:", error);
+    }
+  };
 
   return (
     <ThemeProvider>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={{ flex: 1 }}>
-        <Button bg="transparent" w={40} h={40} m={2} block onPress={() => setVisible(true)}>
+        <Button
+          bg="transparent"
+          w={40}
+          h={40}
+          m={2}
+          block
+          onPress={() => setVisible(true)}
+        >
           <Icon
             name="flag"
             fontFamily="Feather"
@@ -38,8 +69,8 @@ export default function ReportBroken({ selectedMachine }) {
             h={35}
             w={35}
             position="absolute"
-            top={50}
-            right={15}
+            top={35}
+            right={35}
             rounded="circle"
             onPress={() => {
               setVisible(false);
@@ -47,7 +78,7 @@ export default function ReportBroken({ selectedMachine }) {
           >
             <Icon color="black900" name="close" />
           </Button>
-          
+
           <Div m={50}>
             <Text fontWeight="bold" fontSize="4xl">
               {selectedMachine.machine}
@@ -55,9 +86,23 @@ export default function ReportBroken({ selectedMachine }) {
             <Text mt={10} fontSize="lg" color="black">
               Is this machine broken?
             </Text>
-            <Input mt={10} mb={10} w={240} pb={300}></Input>
-            <Button w={240} h={50} bg="blue500" 
-            >Submit</Button>
+            <TextInput
+              style={{
+                height: 400,
+                width: 250,
+                borderColor: "gray",
+                borderWidth: 1,
+              }}
+              multiline={true}
+              numberOfLines={4}
+              clearTextOnFocus={true}
+              // onFocus={() => setOverlayVisible(true)}
+              onChangeText={handleInputChange}
+              value={message}
+            />
+            <Button w={240} h={50} bg="blue500">
+              Submit
+            </Button>
           </Div>
         </Modal>
       </SafeAreaView>
