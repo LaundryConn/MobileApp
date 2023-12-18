@@ -141,7 +141,7 @@ export default function HomePage() {
       setMyUUID(storedUUID);
       setMyName(myName);
     } else {
-      checkMyName();
+      // checkMyName();
     }
   }
 
