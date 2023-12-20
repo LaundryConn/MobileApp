@@ -134,18 +134,24 @@ export default function HomePage() {
       // Data is present in async storage, use it
       setHallId(storedHallId);
       setHallName(storedHallName);
+
+      // Fetch data from supabase about logs and messages
       consolidateData(storedHallId);
     }
 
     if (storedUUID && myName) {
+      // stuff for messages
       setMyUUID(storedUUID);
       setMyName(myName);
+
     } else {
-      // checkMyName();
+      // ask for a name
+      checkMyName();
     }
   }
 
   async function checkMyName() {
+    // console.log(Device.osInternalBuildId)
     const { data, error } = await supabase
       .from("users")
       .select("*")
@@ -224,7 +230,7 @@ export default function HomePage() {
     }
 
     // Return the machines array
-    return setMachineRefinedData(machines);
+    setMachineRefinedData(machines);
   }
 
   const onSelectOption = (value: any) => {
@@ -247,6 +253,7 @@ export default function HomePage() {
 
   const handleSubmit = async () => {
     // setOverlayVisible(false);
+    console.log(Device.osInternalBuildId)
     try {
       const { data, error } = await supabase.from("users").insert({
         device_id: Device.osInternalBuildId,
