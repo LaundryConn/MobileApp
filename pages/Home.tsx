@@ -39,7 +39,7 @@ interface SupbaseMachine {
   created_at: string;
   machine_uuid: string;
   type: string;
-  hall_id: string;
+  hall_uuid: string;
 }
 
 interface DisplayMachines {
@@ -67,6 +67,7 @@ export default function HomePage() {
   const [hallName, setHallName] = useState(null);
 
   // List of log data of Machines for Selected Hall
+  const [machineList, setmachineList] = useState<SupbaseMachine[]>([]);
   const [logData, setLogData] = useState<SupbaseLog[]>([]);
   const [messageData, setMessageData] = useState<SupbaseMessage[]>([]);
 
@@ -134,16 +135,12 @@ export default function HomePage() {
       // Data is present in async storage, use it
       setHallId(storedHallId);
       setHallName(storedHallName);
-
-      // Fetch data from supabase about logs and messages
-      consolidateData(storedHallId);
     }
 
     if (storedUUID && myName) {
       // stuff for messages
       setMyUUID(storedUUID);
       setMyName(myName);
-
     } else {
       // ask for a name
       checkMyName();
@@ -158,15 +155,16 @@ export default function HomePage() {
       .eq("device_id", Device.osInternalBuildId);
 
     if (data != null && data.length > 0) {
-      setMyName(data[0].name);
       AsyncStorage.setItem("name", data[0].name);
+      AsyncStorage.setItem("uuid", data[0].user_uuid);
+      setOverlayVisible(false);
     } else {
       setOverlayVisible(true);
     }
 
-    setMyUUID(data[0].uuid);
     setMyName(data[0].name);
-
+    setMyUUID(data[0].user_uuid);
+    
     if (data[0].status == 1) {
       console.log("banned");
     }
@@ -174,6 +172,21 @@ export default function HomePage() {
     if (error || data?.length == 0) {
       // Data is not present in supabase
       setOverlayVisible(true);
+    }
+  }
+
+  async function fetchMachines(hallId: string | null) {
+    let { data: machines, error } = await supabase
+      .from("machines")
+      .select("*")
+      .eq("hall_uuid", hallId);
+
+    if (machines) {
+      setmachineList(machines);
+    }
+
+    if (error) {
+      throw error;
     }
   }
 
@@ -193,7 +206,7 @@ export default function HomePage() {
   }
 
   async function fetchMessages(hallId: string | null) {
-    console.log(hallId);
+    // console.log(hallId);
     const { data, error } = await supabase.rpc("get_messages_by_hall_id", {
       p_hall_uuid: hallId,
     });
@@ -208,26 +221,68 @@ export default function HomePage() {
     }
   }
 
-  function consolidateData(hallId: string | null) {
-    var logs = fetchLogs(hallId);
-    var messages = fetchMessages(hallId);
+  useEffect(() => {
+    fetchMachines(hallId);
+    fetchLogs(hallId);
+    fetchMessages(hallId);
+  }, [hallId]);
+
+  useEffect(() => {
+    consolidateData(hallId);
+    setMachineSelected(machineRefinedData[0]);
+  }, [machineList, logData, messageData]);
+
+  async function consolidateData(hallId: string | null) {
     // Create a new array of machines
     const machines: DisplayMachines[] = [
-      {
-        id: 1,
-        uuid: "960791f8-622c-4c76-8eae-d59cd400e815",
-        name: "",
+      // {
+      //   id: 1,
+      //   uuid: "960791f8-622c-4c76-8eae-d59cd400e815",
+      //   name: "",
+      //   time: 0,
+      //   status: "",
+      //   confidence: 0,
+      // },
+    ];
+
+    // Loop through each machine
+    machineList.forEach((machine) => {
+      // Create a new machine object
+      const newMachine: DisplayMachines = {
+        id: machine.id,
+        uuid: machine.machine_uuid,
+        name: machine.type + machine.id.toString(),
         time: 0,
         status: "",
         confidence: 0,
-      },
-    ];
+      };
 
-    // Loop through the log data
-    for (const log of logData) {
-      // Check if the machine is already in the machines array
-      console.log(log);
-    }
+      // Loop through each log
+      logData.forEach((log) => {
+        // If the log is for the current machine
+        if (log.machine_uuid === machine.machine_uuid) {
+          // Parse the payload
+          const payload = JSON.parse(log.payload);
+
+          // Set the machine name
+          newMachine.name = payload.machine_name;
+
+          // Set the machine status
+          newMachine.status = payload.status;
+
+          // Set the machine confidence
+          newMachine.confidence = payload.confidence;
+
+          // Set the machine time
+          newMachine.time = payload.time;
+        }
+      });
+
+      // Push the new machine to the machines array
+      machines.push(newMachine);
+    });
+
+    // console.log("machines " + machines);
 
     // Return the machines array
     setMachineRefinedData(machines);
@@ -253,12 +308,15 @@ export default function HomePage() {
 
   const handleSubmit = async () => {
     // setOverlayVisible(false);
-    console.log(Device.osInternalBuildId)
+    console.log(Device.osInternalBuildId);
     try {
-      const { data, error } = await supabase.from("users").insert({
-        device_id: Device.osInternalBuildId,
-        name: nameInput,
-      }).select();
+      const { data, error } = await supabase
+        .from("users")
+        .insert({
+          device_id: Device.osInternalBuildId,
+          name: nameInput,
+        })
+        .select();
       if (error) {
         throw error;
       } else {
@@ -382,7 +440,7 @@ export default function HomePage() {
               width: 250,
               borderColor: "gray",
               borderWidth: 1,
-              padding: 10,
+              padding: 5,
             }}
             multiline={true}
             numberOfLines={1}
@@ -407,10 +465,10 @@ export default function HomePage() {
 
         <Div m={5} flexDir="row">
           <Div>
-            <SelectTime />
-            <ReportBroken selectedMachine={machineSelected} myUUID={myName} />
+            <SelectTime selectedMachine={machineSelected || {"confidence": 0, "id": 1, "name": "", "status": "", "time": 0, "uuid": "960791f8-622c-4c76-8eae-d59cd400e815"}} myUUID={myUUID} />
+            <ReportBroken selectedMachine={machineSelected || {"confidence": 0, "id": 1, "name": "", "status": "", "time": 0, "uuid": "960791f8-622c-4c76-8eae-d59cd400e815"}} myUUID={myUUID} />
           </Div>
-          <Messages selectedMachine={machineSelected} myUUID={myName} />
+          <Messages selectedMachine={machineSelected || {"confidence": 0, "id": 1, "name": "", "status": "", "time": 0, "uuid": "960791f8-622c-4c76-8eae-d59cd400e815"}} myUUID={myUUID} />
         </Div>
       </Header>
     </Div>

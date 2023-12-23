@@ -11,7 +11,7 @@ import {
 } from "react-native-magnus";
 import { supabase } from "../supabase";
 
-export default function ReportBroken(selectedMachine, deviceId) {
+export default function ReportBroken({selectedMachine, myUUID}) {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -20,12 +20,13 @@ export default function ReportBroken(selectedMachine, deviceId) {
   };
 
   const handleSubmit = async () => {
-    // setOverlayVisible(false);
+    setVisible(false);
+
     try {
       const { data, error } = await supabase.from("messages").insert({
-        message: message,
+        message: "reported_broken:~" + message,
         machine_uuid: selectedMachine.uuid,
-        user_uuid: "4520eb4f-a623-4ae2-882b-8e01863e6477",
+        user_uuid: myUUID,
       });
       if (error) {
         throw error;
@@ -76,7 +77,7 @@ export default function ReportBroken(selectedMachine, deviceId) {
               setVisible(false);
             }}
           >
-            <Icon color="black900" name="close" />
+            <Icon color="black" name="close" />
           </Button>
 
           <Div m={50}>
@@ -88,10 +89,11 @@ export default function ReportBroken(selectedMachine, deviceId) {
             </Text>
             <TextInput
               style={{
-                height: 400,
+                height: 250,
                 width: 250,
                 borderColor: "gray",
                 borderWidth: 1,
+                marginTop: 10,
               }}
               multiline={true}
               numberOfLines={4}
@@ -100,7 +102,15 @@ export default function ReportBroken(selectedMachine, deviceId) {
               onChangeText={handleInputChange}
               value={message}
             />
-            <Button w={240} h={50} bg="blue500">
+            <Button
+              w={100}
+              h={50}
+              mt={10}
+              bg="blue500"
+              onPress={() => {
+                handleSubmit();
+              }}
+            >
               Submit
             </Button>
           </Div>

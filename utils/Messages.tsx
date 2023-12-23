@@ -5,7 +5,11 @@ import { Input, Button, Div, Overlay, Icon, Text } from "react-native-magnus";
 import { Keyboard } from "react-native";
 import * as Device from "expo-device";
 
-export default function Messages(selectedMachine, deviceId) {
+export default function Messages({selectedMachine, myUUID}: {selectedMachine: any, myUUID: string}) {
+
+  console.log("selectedMachine", selectedMachine)
+  console.log("myuuid", myUUID)
+
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -19,7 +23,7 @@ export default function Messages(selectedMachine, deviceId) {
       const { data, error } = await supabase.from("messages").insert({
         message: message,
         machine_uuid: selectedMachine.uuid,
-        user_uuid: "4520eb4f-a623-4ae2-882b-8e01863e6477",
+        user_uuid: myUUID,
       });
       if (error) {
         throw error;
@@ -55,6 +59,8 @@ export default function Messages(selectedMachine, deviceId) {
         />
       </TouchableOpacity>
       <Overlay visible={overlayVisible} p="xl">
+        <Button onPress={() => setOverlayVisible(false)}>X</Button>
+
         {/* <ActivityIndicator /> */}
         <Text mt="md">Send a message to the next person</Text>
         <TextInput
