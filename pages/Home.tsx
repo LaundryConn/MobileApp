@@ -17,7 +17,7 @@ import React, { useState, useRef, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { supabase } from "../supabase";
 import * as Device from "expo-device";
-import { TextInput } from "react-native";
+import { StatusBarStyle, TextInput, StatusBar } from "react-native";
 
 interface SupbaseLog {
   id: number;
@@ -84,14 +84,7 @@ export default function HomePage() {
     },
   ]);
   // Selected Machine
-  const [machineSelected, setMachineSelected] = useState<DisplayMachines>({
-    id: 0,
-    uuid: "960791f8-622c-4c76-8eae-d59cd400e815",
-    name: "",
-    time: 0,
-    status: "",
-    confidence: 0,
-  });
+  const [machineSelected, setMachineSelected] = useState(false)
 
   // information regarding person using the app
   const deviceId = Device.osInternalBuildId;
@@ -228,9 +221,12 @@ export default function HomePage() {
   }, [hallId]);
 
   useEffect(() => {
-    consolidateData(hallId);
-    setMachineSelected(machineRefinedData[0]);
+    consolidateData(hallId);;
   }, [machineList, logData, messageData]);
+
+  useEffect(() => {
+    setMachineSelected(false)
+  }, [machineRefinedData])
 
   async function consolidateData(hallId: string | null) {
     // Create a new array of machines
@@ -331,9 +327,10 @@ export default function HomePage() {
       console.error("Error inserting message:", error);
     }
   };
-
+  
   return (
     <Div w={"100%"} h={"100%"} bg="gray900">
+      <StatusBar backgroundColor="#1a202c"></StatusBar>
       <Div m={10} mt={"10%"} flexDir="row">
         <Button
           flex={1}

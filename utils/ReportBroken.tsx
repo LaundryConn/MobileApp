@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, StatusBar, FlatList, TextInput } from "react-native";
 import {
   Div,
@@ -14,6 +14,21 @@ import { supabase } from "../supabase";
 export default function ReportBroken({selectedMachine, myUUID}) {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
+  const [iconcolor, setIconcolor] = useState({1: "gray500", 2: "gray200"})
+  const [trigger, setTrigger] = useState(false)
+
+  // Change the color of the Icon on homepage
+  // Will also allow report option to be triggered if selectedMachine is True 
+  useEffect(() => {
+    if (selectedMachine.name !== ""){
+      setIconcolor({1: "red500", 2: "red200"})
+      setTrigger(true)
+    }
+    else{
+      setIconcolor({1: "gray500", 2: "gray200"})
+      setTrigger(false)
+    }
+  }, [selectedMachine])
 
   const handleInputChange = (input) => {
     setMessage(input);
@@ -48,15 +63,15 @@ export default function ReportBroken({selectedMachine, myUUID}) {
           h={40}
           m={2}
           block
-          onPress={() => setVisible(true)}
+          onPress={() => setVisible(trigger)}
         >
           <Icon
             name="flag"
             fontFamily="Feather"
             fontSize={20}
-            color="red500"
-            bg="red200"
-            borderColor="red500"
+            color={iconcolor[1]}
+            bg={iconcolor[2]}
+            borderColor={iconcolor[1]}
             borderWidth={1}
             h={40}
             w={40}

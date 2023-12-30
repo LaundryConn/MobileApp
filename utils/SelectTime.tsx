@@ -57,13 +57,13 @@ async function registerForPushNotificationsAsync() {
   return token.data;
 }
 
-async function schedulePushNotification() {
+async function schedulePushNotification(minutes: string, machineName: string) {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "Title Test",
-      body: "Body Test",
+      title: "Timer Update",
+      body: "Your timer set for " + machineName + " is up!",
     },
-    trigger: { seconds: 5 },
+    trigger: { seconds: Number(minutes) * 60 },
   });
 }
 
@@ -72,9 +72,13 @@ export default function SelectTime({selectedMachine, myUUID}: {selectedMachine: 
 
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
+  const [iconcolor, setIconcolor] = useState({1: "gray500", 2: "gray200"})
+  const [trigger, setTrigger] = useState(false)
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  // Change the color of the Icon on homepage
+  // Will also allow report option to be triggered if selectedMachine is True 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
@@ -98,6 +102,17 @@ export default function SelectTime({selectedMachine, myUUID}: {selectedMachine: 
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedMachine.name !== ""){
+      setIconcolor({1: "blue500", 2: "blue200"})
+      setTrigger(true)
+    }
+    else{
+      setIconcolor({1: "gray500", 2: "gray200"})
+      setTrigger(false)
+    }
+  }, [selectedMachine])
+
   const [reminderMinutes, setReminderMinutes] = useState("");
 
   const handleSubmit = async () => {
@@ -118,6 +133,8 @@ export default function SelectTime({selectedMachine, myUUID}: {selectedMachine: 
     }
   };
 
+  
+
   return (
     <ThemeProvider>
       <StatusBar barStyle="dark-content" />
@@ -128,15 +145,15 @@ export default function SelectTime({selectedMachine, myUUID}: {selectedMachine: 
           bg="transparent"
           m={2}
           block
-          onPress={() => setVisible(true)}
+          onPress={() => setVisible(trigger)}
         >
           <Icon
             name="bell"
             fontFamily="Feather"
             fontSize={20}
-            color="blue500"
-            bg="blue200"
-            borderColor="blue500"
+            color={iconcolor[1]}
+            bg={iconcolor[2]}
+            borderColor={iconcolor[1]}
             borderWidth={1}
             h={40}
             w={40}
@@ -163,6 +180,7 @@ export default function SelectTime({selectedMachine, myUUID}: {selectedMachine: 
 
             <Input
               mt={50}
+              keyboardType="numeric"
               placeholder="Enter reminder minutes"
               value={reminderMinutes}
               onChangeText={(text) => setReminderMinutes(text)}
@@ -173,7 +191,7 @@ export default function SelectTime({selectedMachine, myUUID}: {selectedMachine: 
               bg="green400"
               mt={10}
               onPress={async () => {
-                await schedulePushNotification();
+                await schedulePushNotification(reminderMinutes, selectedMachine.name);
                 await handleSubmit();
                 setVisible(false);
               }}
