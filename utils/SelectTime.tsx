@@ -122,6 +122,8 @@ export default function SelectTime({selectedMachine, myUUID}: {selectedMachine: 
         message: "reserving:~ " + reminderMinutes,
         machine_uuid: selectedMachine.uuid,
         user_uuid: myUUID,
+        reservation: 1,
+        created_at: new Date().toLocaleString(),
       });
       if (error) {
         throw error;
