@@ -84,7 +84,7 @@ export default function HomePage() {
     },
   ]);
   // Selected Machine
-  const [machineSelected, setMachineSelected] = useState(false)
+  const [machineSelected, setMachineSelected] = useState(null)
 
   // information regarding person using the app
   const deviceId = Device.osInternalBuildId;
@@ -230,16 +230,7 @@ export default function HomePage() {
 
   async function consolidateData(hallId: string | null) {
     // Create a new array of machines
-    const machines: DisplayMachines[] = [
-      // {
-      //   id: 1,
-      //   uuid: "960791f8-622c-4c76-8eae-d59cd400e815",
-      //   name: "",
-      //   time: 0,
-      //   status: "",
-      //   confidence: 0,
-      // },
-    ];
+    const machines: DisplayMachines[] = [];
 
     // Loop through each machine
     machineList.forEach((machine) => {
