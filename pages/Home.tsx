@@ -32,6 +32,7 @@ interface SupbaseMessage {
   message: string;
   user_uuid: string;
   machine_uuid: string;
+  reservation: number;
 }
 
 interface SupbaseMachine {
@@ -188,7 +189,7 @@ export default function HomePage() {
       p_hall_uuid: hallId,
     });
 
-    console.log(data);
+    // console.log(data);
 
     if (data) {
       setLogData(data);
@@ -204,7 +205,7 @@ export default function HomePage() {
       p_hall_uuid: hallId,
     });
 
-    console.log(data);
+    // console.log(data);
 
     if (data) {
       setMessageData(data);
@@ -244,27 +245,71 @@ export default function HomePage() {
         confidence: 0,
       };
 
+      var count = 0;
+
       // Loop through each log
-      logData.forEach((log) => {
+      for (var i = -1; (i * -1) < logData.length; i--){
         // If the log is for the current machine
-        if (log.machine_uuid === machine.machine_uuid) {
-          // Parse the payload
-          const payload = JSON.parse(log.payload);
+        if (logData[i].machine_uuid === machine.machine_uuid && count < 10) {
+          // Set name 
+          newMachine.name = machine.type + machine.id.toString();
 
-          // Set the machine name
-          newMachine.name = payload.machine_name;
+          // Adding the confidence levels
+          newMachine.confidence += parseFloat(logData[i].payload);
 
-          // Set the machine status
-          newMachine.status = payload.status;
-
-          // Set the machine confidence
-          newMachine.confidence = payload.confidence;
-
-          // Set the machine time
-          newMachine.time = payload.time;
+          // Increment the count
+          count++;
         }
-      });
+      };
+      
+      for (var i = -1; (i * -1) < messageData.length; i--){
+        // If the log is for the current machine
+        if (messageData[i * -1].machine_uuid === machine.machine_uuid) {
 
+          var reservationEndTime = new Date();
+          reservationEndTime.setHours(Number(messageData[i * -1].created_at.split(":")[0]));
+          reservationEndTime.setMinutes(Number(messageData[i * -1].created_at.split(":")[1]));
+          reservationEndTime.setSeconds(Number(messageData[i * -1].created_at.split(":")[2]));
+          console.log(reservationEndTime);
+
+          var now = new Date();
+
+          // If reseverd, machine status is set to reserved
+          if (now < reservationEndTime) {
+            if (newMachine.confidence > 50) {
+              newMachine.status = "reserved";
+            }
+            else {
+              newMachine.status = "reserved but not in use";
+            }
+          }
+          // Else, machine status is set to available
+          else {
+            if (newMachine.confidence > 50) {
+              newMachine.status = "in use";
+            }
+            else {
+              newMachine.status = "available";
+            }
+          }
+          break
+
+        }
+      }
+      
+      // If the machine status is not set meaning there were no reservation for this machine, set it
+      if (newMachine.status == "") {
+        if (newMachine.confidence > 50) {
+          newMachine.status = "in use";
+          console.log("in use");
+        }
+        else {
+          newMachine.status = "available";
+          console.log("available");
+        }
+      }
+      // Get the average confidence level
+      newMachine.confidence = newMachine.confidence / count;
       // Push the new machine to the machines array
       machines.push(newMachine);
     });
@@ -295,7 +340,7 @@ export default function HomePage() {
 
   const handleSubmit = async () => {
     // setOverlayVisible(false);
-    console.log(Device.osInternalBuildId);
+    // console.log(Device.osInternalBuildId);
     try {
       const { data, error } = await supabase
         .from("users")
@@ -386,7 +431,7 @@ export default function HomePage() {
               <Text color="black" fontSize="xl" fontWeight="bold" ml={3}>
                 {machine.name}
               </Text>
-              <Piechart loadtime={machine.time} size={20} />
+              <Piechart loadtime={machine.time} size={20} status={machine.status}/>
             </Button>
           );
         })}
@@ -413,7 +458,7 @@ export default function HomePage() {
                 <Text color="black" fontSize="3xl" fontWeight="bold">
                   {machineSelected.name}
                 </Text>
-                <Piechart loadtime={machineSelected.time} size={35} />
+                <Piechart loadtime={machineSelected.time} size={35} status={machineSelected.status}/>
               </Div>
             )}
           </Div>

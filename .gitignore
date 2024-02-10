@@ -34,3 +34,10 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 %ProgramData%/Microsoft/Windows/UUS/State/_active.uusver
+laundryconn-412801-75e391be9982.json
+app-BOOK-8FK02QTF4U.json
+Home-BOOK-8FK02QTF4U.tsx
+google-services.json
+GoogleService-Info.plist
+eas.json
+```
